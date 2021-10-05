@@ -6,6 +6,7 @@ def removeDuplicateString(words):
 
 def strcompare(words,words2):
     flag = 0
+    print("in strcompare")
     if len(words) != len(words2):
         print("entered strings does not match")
         return
