@@ -41,8 +41,8 @@ def freqCharacters(words):
         print(ch, '--->', count)
 
 
-str2 = input("enter the string")
-str1 = input("enter another string to be compared")
+str2 = input("enter the string1")
+str1 = input("enter another string2 to be compared")
 words = str2.split()
 words2 =str1.split()
 print(removeDuplicateString(words))
