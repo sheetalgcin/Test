@@ -1,7 +1,7 @@
 name: Telemetry Automation
 on:
   push:
-    branches: [ "tryactions" ]
+    branches: [ "new_actions" ]
 
 jobs:
   tests:
@@ -10,59 +10,41 @@ jobs:
     steps:
         
     - name: Checkout code
-      uses: actions/checkout@v3         
+      uses: actions/checkout@v3
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
             python-version: '3.11'  # Choose your desired Python version
-    - name: Docker meta
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: automation
-        tags: |
-          type=ref,event=branch
-          
-    - name: Build and push
-      uses: docker/build-push-action@v4
-      with:
-        file: ./automate/Docker_local
-        push: false
-        load: true
-        tags: ${{ steps.meta.outputs.tags }}
+    
+    - name: List all files
+      run: ls -l    
+
+    - name: Build docker image
+      run: docker build -t robot-test-image automate
         
-    - name: Set up Docker Compose
-      run: |
-        docker compose -f ./automate/docker_compose.yaml up -d
-        
-    - name: Set up Docker Compose
-      run: sudo chown -R runner:docker ./automate/results
+    - name: Run the docker image
+      run: docker run --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
 
-    - name: Run the docker
-      run:
-        docker run -e CONDITION1=true  robot-results
-      continue-on-error: true
-
-    - name: Set up Docker Compose
-      run: ls -l  ./automate
-
-    - name: Set up Docker Compose
-      run: :|
-        ls  -l  ./automate/results 
+    - name: List all files again
+      run: ls -l $(pwd)/automate/output
+    
+    - name: Clean up permissions
+      run: sudo chmod -R 777 $(pwd)/automate/output
 
     - name: Upload Dist
       uses: actions/upload-artifact@v3
       with:
         name: reports
-        path: ./automate/results 
+        path: automate/output 
 
     - name: Download artifact
       uses: actions/download-artifact@v3
       id: download
       with:
         name: reports
-        path: ./automate/results      
-      
+        path: reports      
+  
     - name: Send report to commit
       uses: joonvena/robotframework-reporter-action@v2.3
       with:
@@ -74,16 +56,3 @@ jobs:
       with:
         files: |
           reports/res.xml
-
-    - name: Test Summary
-      uses: test-summary/action@v2
-      with:
-          paths: reports/res.xml
-          output: test-summary.md
-      if: always()
-    - name: display the test summary
-      run: |
-        cat test-summary.md
-
-
-  
