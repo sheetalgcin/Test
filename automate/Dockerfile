@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r /workspace/requirements.txt
 CMD ["python", "--version"]
 WORKDIR /app
 
-C# Copy entry.sh into the container
+# Copy entry.sh into the container
 COPY entry.sh /entry.sh
 RUN chmod +x /entry.sh
 
