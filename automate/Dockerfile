@@ -13,7 +13,7 @@ CMD ["python", "--version"]
 
 # Set the working directory in the container
 WORKDIR /app
-RUN chmod +x  /entry.sh
+RUN chmod +x  entry.sh
 COPY  entry.sh    .
 
 # Run command in container and get results under automate/output folder
