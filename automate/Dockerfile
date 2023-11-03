@@ -12,10 +12,9 @@ RUN pip install --no-cache-dir -r /workspace/requirements.txt
 CMD ["python", "--version"]
 
 # Set the working directory in the container
-WORKDIR /app
-RUN chmod +x  entry.sh
-COPY  entry.sh    .
 
+RUN chmod +x  ./automate/entry.sh
+WORKDIR /app
 # Run command in container and get results under automate/output folder
 #CMD ["robot", "--outputdir","output","--output", "output.xml", "--xunit", "res.xml", "Tests/verify"]
 CMD ["./entry.sh"]
