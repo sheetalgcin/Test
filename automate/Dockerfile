@@ -11,10 +11,11 @@ RUN pip install --no-cache-dir -r /workspace/requirements.txt
 # Define the entry point to run Robot Framework
 CMD ["python", "--version"]
 
-# Set the working directory in the container
+COPY entry.sh  ./entry.sh
 
-RUN chmod +x  entry.sh
+# Change the permissions of the script
+RUN chmod +x  ./entry.sh
 WORKDIR /app
 # Run command in container and get results under automate/output folder
 #CMD ["robot", "--outputdir","output","--output", "output.xml", "--xunit", "res.xml", "Tests/verify"]
-CMD ["entry.sh"]
+CMD ["./entry.sh"]
