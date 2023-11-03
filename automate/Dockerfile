@@ -13,9 +13,9 @@ CMD ["python", "--version"]
 
 # Set the working directory in the container
 WORKDIR /app
-COPY entry.sh ./workspace/
-RUN chmod  +x  ./workspace/entry.sh
+
+CMD ["/bin/sh"]
 
 # Run command in container and get results under automate/output folder
 #CMD ["robot", "--outputdir","output","--output", "output.xml", "--xunit", "res.xml", "Tests/verify"]
-CMD ["./workspace/entry.sh"]
+CMD ["./entry.sh"]
