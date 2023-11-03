@@ -22,7 +22,11 @@ jobs:
 
     - name: Build docker image
       run: docker build -t robot-test-image automate
-        
+    
+    - name: List all files
+      run: ls -l  app
+      if: always()
+      
     - name: Run the docker image
       run: docker run --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
 
