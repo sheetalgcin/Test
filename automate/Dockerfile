@@ -5,9 +5,9 @@ FROM python:3.11
 RUN mkdir /workspace
 COPY * ./workspace/
 
-# install the repo requirements for current run
-RUN pip install --upgrade pip 
-RUN pip install --no-cache-dir -r /workspace/requirements.txt
+RUN python -m pip install --upgrade pip
+RUN pip install pipenv && pipenv install --dev --system --deploy
+RUN pip install --no-cache-dir -r  requirements.txt
 
 # Define the entry point to run Robot Framework
 CMD ["python", "--version"]
