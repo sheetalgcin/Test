@@ -6,6 +6,7 @@ RUN mkdir /workspace
 COPY * ./workspace/
 
 # install the repo requirements for current run
+RUN pip install --upgrade pip 
 RUN pip install --no-cache-dir -r /workspace/requirements.txt
 
 # Define the entry point to run Robot Framework
