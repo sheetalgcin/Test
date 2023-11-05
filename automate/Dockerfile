@@ -6,8 +6,7 @@ RUN mkdir /workspace
 COPY * ./workspace/
 
 RUN pip install --no-cache-dir -r  requirements.txt
-RUN python -m pip install --upgrade pip
-RUN pip install pipenv && pipenv install --dev --system --deploy
+
 
 # Define the entry point to run Robot Framework
 CMD ["python", "--version"]
