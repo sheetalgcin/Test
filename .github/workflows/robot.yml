@@ -53,6 +53,7 @@ jobs:
          pip install --no-cache-dir robotframework 
          pip install --no-cache-dir  robotframework  rebot
          rebot --output $(pwd)/automate/output/output.xml  $(pwd)/automate/output/output_*.xml
+         rebot --output $(pwd)/automate/output/res.xml  $(pwd)/automate/output/res_*.xml
 
       
  #   - name: Run the docker image
