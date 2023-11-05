@@ -22,6 +22,10 @@ jobs:
 
     - name: Build docker image
       run: docker build -t robot-test-image automate
+
+    - name: List all files
+      run: |
+          docker rm -f telemetry-container
       
     - name: Run Docker containers with different environment variables and upload output.xml
       run: |
@@ -84,3 +88,10 @@ jobs:
       with:
         files: |
           reports/res.xml
+   #Remove the image from the local registry
+    - name: Remove docker image
+      if: always()
+      run: |
+          docker stop telemetry-container
+          docker image rm -f robot-test-image
+
