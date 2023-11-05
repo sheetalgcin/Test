@@ -5,11 +5,10 @@ FROM python:3.11
 RUN mkdir /workspace
 COPY * ./workspace/
 
-RUN pip install --no-cache-dir -r  requirements.txt
+# install the repo requirements for current run
+RUN pip install --no-cache-dir -r /workspace/requirements.txt
 
-
-# Define the entry point to run Robot Framework
-CMD ["python", "--version"]
+# Set the working directory in the container
 WORKDIR /app
 
 # Copy entry.sh into the container
