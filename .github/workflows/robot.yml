@@ -31,8 +31,8 @@ jobs:
     - name: Run Docker containers with different environment variables and upload output.xml
       run: |
         # Define an array of environment variable sets
-        env_vars=("x=4  y=5" "x=6 y=8" "x=9 y=10")
-
+         env_vars=("10 20" "15 25" "20 30")
+        
         # Loop through the array and run containers with different environment variables
         for env in "${env_vars[@]}"; do
            # Extract 'x' and 'y' values from each element in the array
