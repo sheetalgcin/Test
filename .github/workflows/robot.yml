@@ -34,8 +34,9 @@ jobs:
 
         # Loop through the array and run containers with different environment variables
         for env in "${env_vars[@]}"; do
-            docker run -e env --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
+            docker run -e env --name abc  --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
           # Upload the output.xml file as an artifact for each iteration
+          docker rm abc
         done
 
     - name: Consolidated results
