@@ -47,18 +47,9 @@ jobs:
 
     - name: Consolidated results
       run: |
-        # Assuming you have a tool to generate a test report (e.g., Robot Framework)
-        # Generate a consolidated test report from the downloaded output.xml files
-        # This example uses `robotframework-rebot` to combine Robot Framework reports
-
-        rebot --outputdir $(pwd)/automate/output $(pwd)/automate/output/output_*.xml
-
-        # Publish the consolidated test report as an artifact
-    #    echo "Publishing the consolidated test report"
-     #   actions/upload-artifact@v2
-      #    with:
-       #     name: test-report
-        #    path: consolidated_report
+         pip install --no-cache-dir robotframework 
+         pip install --no-cache-dir  robotframework  rebot
+         rebot --outputdir $(pwd)/automate/output $(pwd)/automate/output/output_*.xml
 
       
  #   - name: Run the docker image
