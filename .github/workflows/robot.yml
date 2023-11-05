@@ -34,14 +34,14 @@ jobs:
           # Upload the output.xml file as an artifact for each iteration
         done
 
- #   - name: Publish Test Report
- #     run: |
+    - name: Consolidated results
+      run: |
         # Assuming you have a tool to generate a test report (e.g., Robot Framework)
         # Generate a consolidated test report from the downloaded output.xml files
         # This example uses `robotframework-rebot` to combine Robot Framework reports
 
-  #      pip install robotframework-rebot
-   #     rebot --outputdir consolidated_report ${{ github.workspace }}/output-xml-files/*.xml
+        pip install robotframework-rebot
+        rebot --outputdir $(pwd)/automate/output $(pwd)/automate/output/output_*.xml
 
         # Publish the consolidated test report as an artifact
     #    echo "Publishing the consolidated test report"
