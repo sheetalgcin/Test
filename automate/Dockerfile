@@ -9,7 +9,8 @@ COPY * ./workspace/
 RUN pip install --no-cache-dir --upgrade pip setuptools
 
 # Install the packages specified in requirements.txt using pip
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install  robotframework
+RUN pip install  robotframework-rebot
 
 # Set the working directory in the container
 WORKDIR /app
