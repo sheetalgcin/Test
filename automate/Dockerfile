@@ -8,9 +8,16 @@ COPY * ./workspace/
 # Update pip and setuptools
 RUN pip install --no-cache-dir --upgrade pip setuptools
 
-# Install the packages specified in requirements.txt using pip
-RUN pip install  robotframework
-RUN pip install  robotframework-rebot
+# Create a virtual environment
+RUN python -m venv venv
+
+# Activate the virtual environment
+RUN . venv/bin/activate
+RUN pip install --no-cache-dir robotframework 
+
+# Install packages within the virtual environment
+RUN pip install --no-cache-dir robotframework robotframework-rebot
+
 
 # Set the working directory in the container
 WORKDIR /app
