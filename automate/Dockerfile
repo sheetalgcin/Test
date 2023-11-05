@@ -16,7 +16,7 @@ RUN . venv/bin/activate
 RUN pip install --no-cache-dir robotframework 
 
 # Install packages within the virtual environment
-RUN pip install --no-cache-dir robotframework robotframework-rebot
+RUN pip install --no-cache-dir  robotframework  rebot
 
 
 # Set the working directory in the container
