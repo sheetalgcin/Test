@@ -5,8 +5,11 @@ FROM python:3.11
 RUN mkdir /workspace
 COPY * ./workspace/
 
-# install the repo requirements for current run
-RUN pip install --no-cache-dir -r /workspace/requirements.txt
+# Update pip and setuptools
+RUN pip install --no-cache-dir --upgrade pip setuptools
+
+# Install the packages specified in requirements.txt using pip
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Set the working directory in the container
 WORKDIR /app
