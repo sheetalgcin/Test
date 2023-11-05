@@ -22,10 +22,37 @@ jobs:
 
     - name: Build docker image
       run: docker build -t robot-test-image automate
-    
       
-    - name: Run the docker image
-      run: docker run --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
+    - name: Run Docker containers with different environment variables and upload output.xml
+      run: |
+        # Define an array of environment variable sets
+        env_vars=("x=4  y=5" "x=6 y=8" "x=9 y=10")
+
+        # Loop through the array and run containers with different environment variables
+        for env in "${env_vars[@]}"; do
+            docker run -e env --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
+          # Upload the output.xml file as an artifact for each iteration
+        done
+
+ #   - name: Publish Test Report
+ #     run: |
+        # Assuming you have a tool to generate a test report (e.g., Robot Framework)
+        # Generate a consolidated test report from the downloaded output.xml files
+        # This example uses `robotframework-rebot` to combine Robot Framework reports
+
+  #      pip install robotframework-rebot
+   #     rebot --outputdir consolidated_report ${{ github.workspace }}/output-xml-files/*.xml
+
+        # Publish the consolidated test report as an artifact
+    #    echo "Publishing the consolidated test report"
+     #   actions/upload-artifact@v2
+      #    with:
+       #     name: test-report
+        #    path: consolidated_report
+
+      
+ #   - name: Run the docker image
+  #    run: docker run --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
 
     - name: List all files again
       run: ls -l $(pwd)/automate/output
