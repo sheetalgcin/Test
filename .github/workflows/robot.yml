@@ -39,7 +39,7 @@ jobs:
             # Run the Docker container with 'x' and 'y' as separate environment variables
             docker run -e x=$x -e y=$y  --name abc  --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
             # Upload the output.xml file as an artifact for each iteration
-           # docker rm abc
+            docker rm abc
         done
 
     - name: Clean up permissions
@@ -48,7 +48,9 @@ jobs:
   
     - name: Consolidate Results
       run: |
-    
+        # Check if the container exists, and if so, remove it
+        docker ps -q -f name=abc | xargs -I {} docker rm -f {}
+        docker run  --name abc  -d  robot-test-image
         # Wait for your tests to complete (add a sleep or polling mechanism as needed)
         sleep 2m
 
