@@ -50,8 +50,8 @@ jobs:
       
     - name: Consolidated results
       run: |
-         pip install --no-cache-dir robotframework 
-         pip install --no-cache-dir  robotframework  rebot
+        docker run --name abc -m 4g -d robot-test-image:latest
+
         # rebot --output $(pwd)/automate/output/output.xml  $(pwd)/automate/output/output_*.xml
          
     - name: Consolidate Results
