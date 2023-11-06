@@ -39,7 +39,7 @@ jobs:
             # Run the Docker container with 'x' and 'y' as separate environment variables
             docker run -e x=$x -e y=$y  --name abc  --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
             # Upload the output.xml file as an artifact for each iteration
-            docker rm abc
+           # docker rm abc
         done
 
     - name: Clean up permissions
@@ -48,19 +48,13 @@ jobs:
   
     - name: Consolidate Results
       run: |
-        docker build -t robot-test-image .
-
-        # Run Robot Framework tests and generate output XML files
-        docker run --name test-container -d robot-test-image
-
+    
         # Wait for your tests to complete (add a sleep or polling mechanism as needed)
-        sleep 1m
+        sleep 2m
 
         # Merge the output XML files
-        docker exec test-container rebot --output /app/output/output.xml /app/output/output_*.xml
+        docker exec abc rebot --output /app/output/output.xml /app/output/output_*.xml
 
-        # Remove the test container
-        docker rm -f test-container
 
         # Adjust the sleep duration and polling as needed to ensure your tests complete
 
