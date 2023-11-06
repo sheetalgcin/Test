@@ -44,11 +44,11 @@ jobs:
     - name: Install rebot and merge output XML files in the host
       uses: actions/setup-python@v4
       with:
-        python-version: '3.9' 
+        python-version: '3.11' 
     - run: |
         pip install --upgrade pip
-        pip install robotframework
-        pip install robotframeeork rebot
+        pip install robotframework==6.1.1
+        pip install robotframework rebot
         rebot --output $(pwd)/automate/output/output.xml $(pwd)/automate/output/output_*.xml
 
           
