@@ -24,9 +24,6 @@ jobs:
     - name: Build docker image
       run: docker build -t robot-test-image automate
 
-    - name: List all files
-      run: |
-          docker rm -f telemetry-container
       
     - name: Run Docker containers with different environment variables and upload output.xml
       run: |
@@ -48,14 +45,10 @@ jobs:
     - name: Clean up permissions
       run: sudo chmod -R 777 $(pwd)/automate/output
       
-    - name: Consolidated results
-      run: |
-        docker run --name abc -m 4g -d robot-test-image:latest
-
-        # rebot --output $(pwd)/automate/output/output.xml  $(pwd)/automate/output/output_*.xml
-         
+  
     - name: Consolidate Results
       run: |
+        docker run --name abc -m 4g -d robot-test-image:latest
         docker run --name abc -d robot-test-image:latest rebot --output /app/output/output.xml /app/output/output_*.xml
       if: always()
 
@@ -100,6 +93,6 @@ jobs:
     - name: Remove docker image
       if: always()
       run: |
-          docker stop ABC
+          docker stop abc
           docker image rm -f robot-test-image
 
