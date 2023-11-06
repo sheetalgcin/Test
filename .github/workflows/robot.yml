@@ -60,7 +60,7 @@ jobs:
       if: always()
 
     - name: List all files again
-      run: ls -l $(pwd)/automation/output
+      run: ls -l $(pwd)/automate/output
       if: always()
       
  #   - name: Run the docker image
