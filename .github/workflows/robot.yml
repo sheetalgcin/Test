@@ -56,8 +56,8 @@ jobs:
          
     - name: Consolidate Results
       run: |
-        docker run --name testreport-container  -d robot-test-image:latest
-        docker exec testreport-container rebot --output /app/output/output.xml /app/output/output_**.xml
+        docker run --name testreport-container -m 3g -d robot-test-image:latest
+        docker exec testreport-container rebot --output /app/output/output.xml /app/output/output_*.xml
       if: always()
 
     - name: List all files again
