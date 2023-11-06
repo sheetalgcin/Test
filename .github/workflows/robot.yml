@@ -1,7 +1,14 @@
 name: Telemetry Automation
 on:
-  push:
-    branches: [ "new_actions" ]
+  workflow_dispatch:
+    inputs:
+      appId:
+        required: true
+      public:
+         required: true
+      deviceName:
+        required: true
+        
 
 jobs:
   tests:
