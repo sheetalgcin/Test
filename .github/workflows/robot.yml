@@ -48,9 +48,22 @@ jobs:
   
     - name: Consolidate Results
       run: |
-        docker run --name abc -m 4g -d robot-test-image:latest
-        docker exec abc  rebot --output /app/output/output.xml /app/output/output_*.xml
-      if: always()
+        docker build -t robot-test-image .
+
+        # Run Robot Framework tests and generate output XML files
+        docker run --name test-container -d robot-test-image
+
+        # Wait for your tests to complete (add a sleep or polling mechanism as needed)
+        sleep 1m
+
+        # Merge the output XML files
+        docker exec test-container rebot --output /app/output/output.xml /app/output/output_*.xml
+
+        # Remove the test container
+        docker rm -f test-container
+
+        # Adjust the sleep duration and polling as needed to ensure your tests complete
+
 
     - name: List all files again
       run: ls -l $(pwd)/automate/output
