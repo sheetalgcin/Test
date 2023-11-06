@@ -43,7 +43,9 @@ jobs:
         done
 
     - name: Clean up permissions
-      run: sudo chmod -R 777 $(pwd)/automate/output
+      run: |
+        docker rm abc
+        sudo chmod -R 777 $(pwd)/automate/output
       
   
     - name: Consolidate Results
