@@ -56,8 +56,7 @@ jobs:
          
     - name: Consolidate Results
       run: |
-        docker run --name testreport-container -m 3g -d robot-test-image:latest
-        docker exec testreport-container rebot --output /app/output/output.xml /app/output/output_*.xml
+        docker run --name abc -d robot-test-image:latest rebot --output /app/output/output.xml /app/output/output_*.xml
       if: always()
 
     - name: List all files again
@@ -101,6 +100,6 @@ jobs:
     - name: Remove docker image
       if: always()
       run: |
-          docker stop telemetry-container
+          docker stop ABC
           docker image rm -f robot-test-image
 
