@@ -52,8 +52,17 @@ jobs:
       run: |
          pip install --no-cache-dir robotframework 
          pip install --no-cache-dir  robotframework  rebot
-         rebot --output $(pwd)/automate/output/output.xml  $(pwd)/automate/output/output_*.xml
+        # rebot --output $(pwd)/automate/output/output.xml  $(pwd)/automate/output/output_*.xml
+         
+    - name: Consolidate Results
+      run: |
+        docker run --name testreport-container --mount type=bind,source=$(pwd)/automate/output,target=/app/output -d robot-test-image:latest
+        docker exec testreport-container rebot --output /app/output/output.xml /app/output/output_**.xml
+      if: always()
 
+    - name: List all files again
+      run: ls -l $(pwd)/automation/output
+      if: always()
       
  #   - name: Run the docker image
   #    run: docker run --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
