@@ -13,11 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-            python-version: '3.11'  # Choose your desired Python version
-    
+   
     - name: List all files
       run: ls -l    
 
@@ -44,17 +40,26 @@ jobs:
 
     - name: Clean up permissions
       run: sudo chmod -R 777 $(pwd)/automate/output
-      
-  
-    - name: Consolidate Results
-      run: |
+    
+    - name: Install rebot and merge output XML files in the host
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9' 
+    - run: |
+        pip install robotframework
+        pip install robotframeeork rebot
+        rebot --output $(pwd)/automate/output/output.xml $(pwd)/automate/output/output_*.xml
+
+          
+  #  - name: Consolidate Results
+  #    run: |
         # Check if the container exists, and if so, remove it
-        docker run  --name abc  -d  robot-test-image
+  #      docker run  --name abc  -d  robot-test-image
         # Wait for your tests to complete (add a sleep or polling mechanism as needed)
-        sleep 2m
+   #     sleep 2m
 
         # Merge the output XML files
-        docker exec abc  rebot --output /app/output/output.xml /app/output/output_*.xml
+    #    docker exec abc  rebot --output /app/output/output.xml /app/output/output_*.xml
 
     - name: List all files again
       run: ls -l $(pwd)/automate/output
