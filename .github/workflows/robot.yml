@@ -43,15 +43,13 @@ jobs:
         done
 
     - name: Clean up permissions
-      run: |
-        docker rm abc
-        sudo chmod -R 777 $(pwd)/automate/output
+      run: sudo chmod -R 777 $(pwd)/automate/output
       
   
     - name: Consolidate Results
       run: |
         docker run --name abc -m 4g -d robot-test-image:latest
-        docker run --name abc -d robot-test-image:latest rebot --output /app/output/output.xml /app/output/output_*.xml
+        docker exec abc  rebot --output /app/output/output.xml /app/output/output_*.xml
       if: always()
 
     - name: List all files again
