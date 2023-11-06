@@ -49,17 +49,12 @@ jobs:
     - name: Consolidate Results
       run: |
         # Check if the container exists, and if so, remove it
-        docker ps -q -f name=abc | xargs -I {} docker rm -f {}
         docker run  --name abc  -d  robot-test-image
         # Wait for your tests to complete (add a sleep or polling mechanism as needed)
         sleep 2m
 
         # Merge the output XML files
-        docker exec abc rebot --output /app/output/output.xml /app/output/output_*.xml
-
-
-        # Adjust the sleep duration and polling as needed to ensure your tests complete
-
+        docker exec abc  rebot --output /app/output/output.xml /app/output/output_*.xml
 
     - name: List all files again
       run: ls -l $(pwd)/automate/output
