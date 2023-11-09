@@ -26,5 +26,6 @@ jobs:
       run: |
         adb devices
         ls -l 
+        adb install ./example.apk
         # Add more ADB commands as needed
 
