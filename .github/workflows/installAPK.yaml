@@ -1,0 +1,19 @@
+name: Android / Install APK
+
+on:
+  push:
+    branches: [ "tryactions" ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3         
+    - name: Install adb command on Linux
+      run: 
+        add-apt-repository ppa:phablet-team/tools && apt-get update
+        apt-get install android-tools-adb android-tools-fastboot
+        adb devices
+
