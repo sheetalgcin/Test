@@ -5,28 +5,25 @@ on:
     branches: [ "tryactions" ]
 
 jobs:
-  tests:
+  build:
     runs-on: ubuntu-latest
-  
-    steps:
-  
-      - name: checkout
-        uses: actions/checkout@v3
 
-      - name: Gradle cache
-        uses: gradle/gradle-build-action@v2
-        
-      - name: AVD cache
-        uses: actions/cache@v3
-        id: avd-cache
-        with:
-          path: |
-            ~/.android/avd/*
-            ~/.android/adb*
-          key: avd-${{ matrix.api-level }}
-      - name: Install adb command on Linux
-        run: 
-          #sudo add-apt-repository ppa:phablet-team/tools && apt-get update
-        #sudo apt-get install android-tools-adb android-tools-fastboot
-            adb devices
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up JDK
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: '11'
+
+    - name: Install ADB
+      run: |
+        sudo apt-get install android-tools-adb
+
+    - name: Run ADB commands
+      run: |
+        adb devices
+        # Add more ADB commands as needed
 
