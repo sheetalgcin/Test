@@ -25,5 +25,6 @@ jobs:
     - name: Run ADB commands
       run: |
         adb devices
+        ls -l 
         # Add more ADB commands as needed
 
