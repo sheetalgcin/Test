@@ -1,68 +1,100 @@
 name: Telemetry Automation
 on:
-  push:
-    branches: [ "tryactions" ]
+  workflow_dispatch:
+    inputs:
+      appId:
+        required: true
+      public:
+         required: true
+      deviceName:
+        required: true
+        
 
 jobs:
   tests:
     runs-on: ubuntu-latest
   
     steps:
-        
+  
+
     - name: Checkout code
-      uses: actions/checkout@v3         
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-            python-version: '3.11'  # Choose your desired Python version
-    - name: Docker meta
-      id: meta
-      uses: docker/metadata-action@v3
-      with:
-        images: automation
-        tags: |
-          type=ref,event=branch
-          
-    - name: Build and push
-      uses: docker/build-push-action@v4
-      with:
-        file: ./automate/Docker_local
-        push: false
-        load: true
-        tags: ${{ steps.meta.outputs.tags }}
-        
-    - name: Set up Docker Compose
+      uses: actions/checkout@v3
+
+   
+    - name: List all files
+      run: ls -l    
+
+    - name: Build docker image
+      run: docker build -t robot-test-image automate
+
+      
+    - name: Run Docker containers with different environment variables and upload output.xml
       run: |
-        docker compose -f ./automate/docker_compose.yaml up -d
+        # Define an array of environment variable sets
+         env_vars=("10 20" "15 25" "20 30")
         
-    - name: Set up Docker Compose
-      run: sudo chown -R runner:docker ./automate/results
+        # Loop through the array and run containers with different environment variables
+        for env in "${env_vars[@]}"; do
+           # Extract 'x' and 'y' values from each element in the array
+            x=$(echo $env | cut -d' ' -f1)
+            y=$(echo $env | cut -d' ' -f2)
 
-    - name: Run the docker
-      run:
-        docker run -e CONDITION1=true  robot-results
-      continue-on-error: true
+            # Run the Docker container with 'x' and 'y' as separate environment variables
+            docker run -e x=$x -e y=$y  --name abc  --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
+            # Upload the output.xml file as an artifact for each iteration
+            docker rm abc
+        done
 
-    - name: Set up Docker Compose
-      run: ls -l  ./automate
+    - name: Clean up permissions
+      run: sudo chmod -R 777 $(pwd)/automate/output
+    
+    - name: Install rebot and merge output XML files in the host
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11' 
+    - run: |
+        pip install --upgrade pip
+        pip install robotframework==6.1.1
+        pip install robotframework rebot
+        rebot --output $(pwd)/automate/output/output.xml $(pwd)/automate/output/output_*.xml
 
-    - name: Set up Docker Compose
-      run: :|
-        ls  -l  ./automate/results 
+          
+  #  - name: Consolidate Results
+  #    run: |
+        # Check if the container exists, and if so, remove it
+  #      docker run  --name abc  -d  robot-test-image
+        # Wait for your tests to complete (add a sleep or polling mechanism as needed)
+   #     sleep 2m
+
+        # Merge the output XML files
+    #    docker exec abc  rebot --output /app/output/output.xml /app/output/output_*.xml
+
+    - name: List all files again
+      run: ls -l $(pwd)/automate/output
+      if: always()
+      
+ #   - name: Run the docker image
+  #    run: docker run --name telemetry-container --mount type=bind,source=$(pwd)/automate,target=/app robot-test-image
+
+    - name: List all files again
+      run: ls -l $(pwd)/automate/output
+    
+    - name: Clean up permissions
+      run: sudo chmod -R 777 $(pwd)/automate/output
 
     - name: Upload Dist
       uses: actions/upload-artifact@v3
       with:
         name: reports
-        path: ./automate/results 
+        path: automate/output 
 
     - name: Download artifact
       uses: actions/download-artifact@v3
       id: download
       with:
         name: reports
-        path: ./automate/results      
-      
+        path: reports      
+  
     - name: Send report to commit
       uses: joonvena/robotframework-reporter-action@v2.3
       with:
@@ -74,16 +106,10 @@ jobs:
       with:
         files: |
           reports/res.xml
-
-    - name: Test Summary
-      uses: test-summary/action@v2
-      with:
-          paths: reports/res.xml
-          output: test-summary.md
+   #Remove the image from the local registry
+    - name: Remove docker image
       if: always()
-    - name: display the test summary
       run: |
-        cat test-summary.md
+          docker stop abc
+          docker image rm -f robot-test-image
 
-
-  
